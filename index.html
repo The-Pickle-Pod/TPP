@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Pickle Pod – Pickleball Courts</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #f5c842;
+    --blue-bright: #4fc3f7;
+    --blue-deep: #0d1b3e;
+    --blue-mid: #1a2f6e;
+    --purple: #2d1b69;
+    --glow: 0 0 18px rgba(79,195,247,0.5);
+    --gold-glow: 0 0 18px rgba(245,200,66,0.5);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Exo 2', sans-serif;
+    background: #050d1f;
+    color: #e8f4ff;
+    overflow-x: hidden;
+  }
+
+  /* ── STARFIELD ── */
+  #stars-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 40px;
+    background: rgba(5,13,31,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(79,195,247,0.15);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+  }
+
+  .nav-logo span {
+    font-family: 'Orbitron', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(232,244,255,0.75);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--blue-bright); }
+
+  .nav-cta {
+    background: var(--gold);
+    color: #050d1f;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: box-shadow 0.2s, transform 0.15s;
+  }
+
+  .nav-cta:hover {
+    box-shadow: var(--gold-glow);
+    transform: translateY(-1px);
+  }
+
+  /* hamburger */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--blue-bright);
+    border-radius: 2px;
+    transition: 0.3s;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+  }
+
+  .hero-logo {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    box-shadow: var(--gold-glow), 0 0 60px rgba(245,200,66,0.2);
+    margin-bottom: 32px;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-14px); }
+  }
+
+  .hero-tag {
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--blue-bright);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(38px, 7vw, 80px);
+    font-weight: 900;
+    line-height: 1.05;
+    color: #fff;
+    text-shadow: 0 0 40px rgba(79,195,247,0.3);
+    margin-bottom: 8px;
+  }
+
+  h1 span { color: var(--gold); }
+
+  .hero-year {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(18px, 3vw, 28px);
+    color: var(--blue-bright);
+    letter-spacing: 8px;
+    margin-bottom: 28px;
+  }
+
+  .hero-desc {
+    max-width: 560px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: rgba(232,244,255,0.75);
+    margin-bottom: 40px;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: #050d1f;
+    padding: 14px 34px;
+    border-radius: 8px;
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: box-shadow 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { box-shadow: var(--gold-glow); transform: translateY(-2px); }
+
+  .btn-outline {
+    border: 2px solid var(--blue-bright);
+    color: var(--blue-bright);
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-outline:hover {
+    background: rgba(79,195,247,0.1);
+    box-shadow: var(--glow);
+    transform: translateY(-2px);
+  }
+
+  .scroll-hint {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(232,244,255,0.4);
+    font-size: 12px;
+    letter-spacing: 2px;
+    animation: fadeInUp 1.5s 1s both;
+  }
+  .scroll-hint .arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid rgba(232,244,255,0.4);
+    border-bottom: 2px solid rgba(232,244,255,0.4);
+    transform: rotate(45deg);
+    animation: bounce 1.4s ease-in-out infinite;
+  }
+  @keyframes bounce { 0%,100%{transform:rotate(45deg) translateY(0)} 50%{transform:rotate(45deg) translateY(6px)} }
+
+  /* ── SECTION SHARED ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 24px;
+  }
+
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--blue-bright);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(26px, 4vw, 44px);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+
+  h2 span { color: var(--gold); }
+
+  .section-divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--blue-bright));
+    border-radius: 2px;
+    margin-bottom: 48px;
+  }
+
+  /* ── ABOUT / STATS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  .stat-card {
+    background: rgba(26,47,110,0.35);
+    border: 1px solid rgba(79,195,247,0.2);
+    border-radius: 14px;
+    padding: 28px 20px;
+    text-align: center;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .stat-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 0 30px rgba(245,200,66,0.12);
+  }
+
+  .stat-number {
+    font-family: 'Orbitron', monospace;
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: rgba(232,244,255,0.6);
+    letter-spacing: 1px;
+  }
+
+  /* ── PRICING ── */
+  #pricing { background: rgba(13,27,62,0.4); }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 16px;
+  }
+
+  .price-card {
+    background: rgba(26,47,110,0.35);
+    border: 1px solid rgba(79,195,247,0.2);
+    border-radius: 18px;
+    padding: 40px 32px;
+    text-align: center;
+    transition: transform 0.25s, box-shadow 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .price-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue-bright), var(--gold));
+  }
+
+  .price-card.featured {
+    border-color: var(--gold);
+    box-shadow: 0 0 40px rgba(245,200,66,0.15);
+  }
+
+  .price-card.featured::before {
+    background: linear-gradient(90deg, var(--gold), var(--blue-bright));
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: var(--gold);
+    color: #050d1f;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  .price-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+  }
+
+  .price-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .price-amount {
+    font-family: 'Orbitron', monospace;
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .price-per {
+    font-size: 14px;
+    color: rgba(232,244,255,0.5);
+    margin-bottom: 24px;
+  }
+
+  .price-desc {
+    font-size: 14px;
+    color: rgba(232,244,255,0.7);
+    line-height: 1.7;
+  }
+
+  .price-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+
+  /* ── GALLERY ── */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .gallery-item {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(79,195,247,0.15);
+    transition: transform 0.3s, box-shadow 0.3s;
+    aspect-ratio: 4/3;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s;
+  }
+
+  .gallery-item:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(79,195,247,0.2); }
+  .gallery-item:hover img { transform: scale(1.06); }
+
+  /* ── BOOKING ── */
+  #booking { background: rgba(13,27,62,0.4); }
+
+  .booking-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .booking-info p {
+    color: rgba(232,244,255,0.7);
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .qr-block {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(26,47,110,0.5);
+    border: 1px solid rgba(79,195,247,0.2);
+    border-radius: 14px;
+    padding: 24px;
+    margin-top: 32px;
+  }
+
+  .qr-placeholder {
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #050d1f;
+    text-align: center;
+    font-weight: 600;
+    padding: 8px;
+    flex-shrink: 0;
+  }
+
+  .qr-text h4 {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .qr-text p {
+    font-size: 13px;
+    color: rgba(232,244,255,0.6);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  .booking-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #050d1f;
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-content h4 {
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    color: #fff;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .step-content p {
+    font-size: 14px;
+    color: rgba(232,244,255,0.6);
+    line-height: 1.6;
+  }
+
+  /* ── LOCATION ── */
+  .location-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .location-card {
+    background: rgba(26,47,110,0.35);
+    border: 1px solid rgba(79,195,247,0.2);
+    border-radius: 16px;
+    padding: 32px;
+  }
+
+  .location-card h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 16px;
+    color: var(--blue-bright);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+
+  .location-card p, .location-card a {
+    font-size: 15px;
+    color: rgba(232,244,255,0.75);
+    line-height: 1.8;
+    text-decoration: none;
+  }
+
+  .location-card a:hover { color: var(--gold); }
+
+  .map-embed {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(79,195,247,0.2);
+    height: 320px;
+  }
+
+  .map-embed iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    filter: invert(0.9) hue-rotate(180deg) brightness(0.85);
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .contact-icon {
+    font-size: 20px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    background: rgba(5,13,31,0.95);
+    border-top: 1px solid rgba(79,195,247,0.1);
+    padding: 48px 24px 32px;
+    text-align: center;
+  }
+
+  footer img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    margin-bottom: 16px;
+  }
+
+  footer .footer-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    color: var(--gold);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+
+  footer p {
+    font-size: 13px;
+    color: rgba(232,244,255,0.4);
+    margin-bottom: 4px;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 24px 0;
+  }
+
+  .social-links a {
+    color: rgba(232,244,255,0.5);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .social-links a:hover { color: var(--blue-bright); }
+
+  /* ── ANIMATIONS ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── MOBILE NAV ── */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0; background: rgba(5,13,31,0.97); border-bottom: 1px solid rgba(79,195,247,0.15); padding: 20px; gap: 20px; }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    .nav-cta { display: none; }
+    .booking-inner, .location-grid { grid-template-columns: 1fr; }
+    section { padding: 70px 20px; }
+  }
+
+  /* nebula blobs */
+  .nebula {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .nebula-1 { width: 600px; height: 600px; background: rgba(79,195,247,0.04); top: -200px; right: -200px; }
+  .nebula-2 { width: 500px; height: 500px; background: rgba(245,200,66,0.04); bottom: 20%; left: -150px; }
+  .nebula-3 { width: 400px; height: 400px; background: rgba(45,27,105,0.1); top: 50%; right: 10%; }
+</style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+<div class="nebula nebula-3"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <img src="logo.png" alt="The Pickle Pod logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+    <div style="display:none;width:44px;height:44px;border-radius:50%;background:#1a2f6e;border:2px solid #f5c842;display:flex;align-items:center;justify-content:center;font-size:18px;">🏓</div>
+    <span>The Pickle Pod</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#booking">Book</a></li>
+    <li><a href="#location">Location</a></li>
+  </ul>
+  <a href="https://reclub.co/m/WMKPY0" target="_blank" class="nav-cta">Book Now</a>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <img src="logo.png" alt="The Pickle Pod" class="hero-logo"
+    onerror="this.style.display='none';document.getElementById('hero-icon').style.display='block'" />
+  <div id="hero-icon" style="display:none;width:160px;height:160px;border-radius:50%;background:#1a2f6e;border:3px solid #f5c842;box-shadow:0 0 18px rgba(245,200,66,0.5);margin-bottom:32px;display:flex;align-items:center;justify-content:center;font-size:64px;animation:float 4s ease-in-out infinite">🏓</div>
+  <p class="hero-tag">Min's Premier Pickleball Hub</p>
+  <h1>The Pickle <span>Pod</span></h1>
+  <p class="hero-year">2 0 2 6</p>
+  <p class="hero-desc">Your mission-ready pickleball facility. Whether you're a beginner exploring the sport or a seasoned player looking to sharpen your game — we have the courts and coaching for you.</p>
+  <div class="hero-btns">
+    <a href="https://reclub.co/m/WMKPY0" target="_blank" class="btn-primary">🚀 Book a Court</a>
+    <a href="#about" class="btn-outline">Explore</a>
+  </div>
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="fade-in">
+      <p class="section-label">About Us</p>
+      <h2>Where <span>Sport</span> Meets the Stars</h2>
+      <div class="section-divider"></div>
+      <p style="max-width:680px;font-size:16px;line-height:1.9;color:rgba(232,244,255,0.75);">
+        The Pickle Pod is Minglanilla's space-themed pickleball destination, nestled inside Villa Rammelyn Garden &amp; Resort. We offer professional-grade indoor courts, certified coaching, and a welcoming community for players of all skill levels. Come play, compete, and connect.
+      </p>
+    </div>
+    <div class="stats-grid fade-in">
+      <div class="stat-card">
+        <div class="stat-number">2+</div>
+        <div class="stat-label">Indoor Courts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">9:00 AM - 1:00 AM</div>
+        <div class="stat-label">Online Booking</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">All</div>
+        <div class="stat-label">Skill Levels Welcome</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">₱300</div>
+        <div class="stat-label">Coaching / Hour</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-inner">
+    <div class="fade-in">
+      <p class="section-label">Pricing</p>
+      <h2>Launch Your <span>Game</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="pricing-grid fade-in">
+      <div class="price-card featured">
+        <div class="featured-badge">Most Popular</div>
+        <div class="price-icon">🏸</div>
+        <div class="price-title">Court Fee</div>
+        <div class="price-amount">₱500</div>
+        <div class="price-per">per hour · split between players</div>
+        <div class="price-desc">Access to our full-sized indoor pickleball courts with professional flooring and River nets. Split the cost with your squad — the more the merrier!</div>
+      </div>
+      <div class="price-card">
+        <div class="price-icon">🎓</div>
+        <div class="price-title">Coaching</div>
+        <div class="price-amount">₱300</div>
+        <div class="price-per">per hour · per session</div>
+        <div class="price-desc">One-on-one or group coaching sessions with certified instructors. Perfect for beginners learning the basics or competitive players leveling up.</div>
+      </div>
+    </div>
+    <div style="margin-top:40px;text-align:center;" class="fade-in">
+      <a href="https://reclub.co/m/WMKPY0" target="_blank" class="btn-primary">Reserve Your Slot Now →</a>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-inner">
+    <div class="fade-in">
+      <p class="section-label">Gallery</p>
+      <h2>Life at the <span>Pod</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="gallery-grid fade-in">
+      <div class="gallery-item">
+        <img src="img1.jpg" alt="The Pickle Pod podium celebration" loading="lazy" />
+      </div>
+      <div class="gallery-item">
+        <img src="img2.jpg" alt="Group photo at The Pickle Pod courts" loading="lazy" />
+      </div>
+      <div class="gallery-item">
+        <img src="img3.jpg" alt="Players at The Pickle Pod" loading="lazy" />
+      </div>
+      <div class="gallery-item">
+        <img src="img4.jpg" alt="Pickleball match action" loading="lazy" />
+      </div>
+      <div class="gallery-item">
+        <img src="img5.jpg" alt="Doubles match at The Pickle Pod" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="section-inner">
+    <div class="fade-in">
+      <p class="section-label">Booking</p>
+      <h2>Reserve Your <span>Court</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="booking-inner fade-in">
+      <div class="booking-info">
+        <p>Booking is quick and easy through our partner app <strong style="color:#f5c842">ReClub</strong>. Select your date, pick a time slot, and pay securely online — all in under two minutes.</p>
+        <a href="https://reclub.co/m/WMKPY0" target="_blank" class="btn-primary" style="margin-bottom:24px;display:inline-block;">Open ReClub App →</a>
+        <div class="qr-block">
+          <div class="qr-placeholder">
+            <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+              <!-- QR code visual representation -->
+              <rect width="80" height="80" fill="white"/>
+              <rect x="5" y="5" width="26" height="26" rx="2" fill="#050d1f"/>
+              <rect x="8" y="8" width="20" height="20" rx="1" fill="white"/>
+              <rect x="11" y="11" width="14" height="14" rx="1" fill="#050d1f"/>
+              <rect x="49" y="5" width="26" height="26" rx="2" fill="#050d1f"/>
+              <rect x="52" y="8" width="20" height="20" rx="1" fill="white"/>
+              <rect x="55" y="11" width="14" height="14" rx="1" fill="#050d1f"/>
+              <rect x="5" y="49" width="26" height="26" rx="2" fill="#050d1f"/>
+              <rect x="8" y="52" width="20" height="20" rx="1" fill="white"/>
+              <rect x="11" y="55" width="14" height="14" rx="1" fill="#050d1f"/>
+              <rect x="38" y="5" width="5" height="5" fill="#050d1f"/>
+              <rect x="38" y="14" width="5" height="5" fill="#050d1f"/>
+              <rect x="5" y="38" width="5" height="5" fill="#050d1f"/>
+              <rect x="14" y="38" width="5" height="5" fill="#050d1f"/>
+              <rect x="38" y="38" width="5" height="5" fill="#050d1f"/>
+              <rect x="47" y="38" width="5" height="5" fill="#050d1f"/>
+              <rect x="56" y="38" width="5" height="5" fill="#050d1f"/>
+              <rect x="65" y="38" width="10" height="5" fill="#050d1f"/>
+              <rect x="38" y="47" width="5" height="5" fill="#050d1f"/>
+              <rect x="47" y="47" width="5" height="5" fill="#050d1f"/>
+              <rect x="60" y="47" width="5" height="5" fill="#050d1f"/>
+              <rect x="38" y="56" width="10" height="5" fill="#050d1f"/>
+              <rect x="56" y="56" width="5" height="5" fill="#050d1f"/>
+              <rect x="65" y="56" width="10" height="5" fill="#050d1f"/>
+              <rect x="47" y="65" width="5" height="5" fill="#050d1f"/>
+              <rect x="60" y="65" width="15" height="5" fill="#050d1f"/>
+            </svg>
+          </div>
+          <div class="qr-text">
+            <h4>Scan to Book</h4>
+            <p>Point your phone camera at the QR code to open the ReClub booking page directly.</p>
+          </div>
+        </div>
+      </div>
+      <div class="booking-steps">
+        <h3 style="font-family:'Orbitron',monospace;font-size:16px;color:#fff;margin-bottom:8px;">How to Book</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Open ReClub</h4>
+            <p>Visit the link or scan the QR code to open our booking page on ReClub.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Pick Date &amp; Time</h4>
+            <p>Choose your preferred date, time slot, and number of players.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Pay Securely</h4>
+            <p>Complete payment through the app. Confirmation is sent instantly.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Play!</h4>
+            <p>Show your confirmation on arrival and get ready to rally. See you on the court! 🏓</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section id="location">
+  <div class="section-inner">
+    <div class="fade-in">
+      <p class="section-label">Find Us</p>
+      <h2>Mission <span>HQ</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="location-grid fade-in">
+      <div>
+        <div class="location-card" style="margin-bottom:20px;">
+          <h3>📍 Address</h3>
+          <p>Villa Rammelyn Garden &amp; Resort<br />M. Selma St., Lower Calajoan<br />Minglanilla, Philippines 6046</p>
+        </div>
+        <div class="location-card" style="margin-bottom:20px;">
+          <h3>📬 Contact Us</h3>
+          <div class="contact-item">
+            <span class="contact-icon">📘</span>
+            <a href="https://www.facebook.com/profile.php?id=61584861323516" target="_blank">Follow us on Facebook</a>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">✉️</span>
+            <a href="mailto:picklepodcebu@gmail.com">picklepodcebu@gmail.com</a>
+          </div>
+        </div>
+        <div class="location-card">
+          <h3>🕒 Hours</h3>
+          <p>Open daily for court reservations<br />Book online via ReClub for availability</p>
+        </div>
+      </div>
+      <div>
+        <div class="map-embed">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3925.0!2d123.9498!3d10.2378!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a99b0a9c6e0001%3A0x0!2sVilla+Rammelyn+Garden+%26+Resort%2C+M.+Selma+St.%2C+Minglanilla%2C+Philippines!5e0!3m2!1sen!2sph!4v1"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="The Pickle Pod Location Map">
+          </iframe>
+        </div>
+        <div style="margin-top:20px;text-align:center;">
+          <a href="https://maps.google.com/?q=Villa+Rammelyn+Garden+Resort+Minglanilla+Philippines" target="_blank" class="btn-outline">Open in Google Maps →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="logo.png" alt="The Pickle Pod" onerror="this.style.display='none'" />
+  <div class="footer-name">THE PICKLE POD</div>
+  <p>Villa Rammelyn Garden &amp; Resort · Minglanilla, Philippines</p>
+  <div class="social-links">
+    <a href="https://www.facebook.com/profile.php?id=61584861323516" target="_blank">📘 Facebook</a>
+    <a href="mailto:picklepodcebu@gmail.com">✉️ Email</a>
+    <a href="https://reclub.co/m/WMKPY0" target="_blank">🚀 Book Now</a>
+  </div>
+  <p style="margin-top:8px;">© 2026 The Pickle Pod · All rights reserved</p>
+</footer>
+
+<script>
+// ── STARFIELD ──
+(function(){
+  const canvas = document.getElementById('stars-canvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  function init(){
+    stars = [];
+    for(let i=0;i<220;i++){
+      stars.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: Math.random()*1.4+0.3,
+        a: Math.random(),
+        speed: Math.random()*0.004+0.001
+      });
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    stars.forEach(s=>{
+      s.a += s.speed;
+      const alpha = (Math.sin(s.a)+1)/2*0.8+0.1;
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(200,230,255,${alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();
+  init();
+  draw();
+  window.addEventListener('resize',()=>{ resize(); init(); });
+})();
+
+// ── HAMBURGER ──
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+hamburger.addEventListener('click',()=>{
+  navLinks.classList.toggle('open');
+});
+navLinks.querySelectorAll('a').forEach(a=>{
+  a.addEventListener('click',()=>navLinks.classList.remove('open'));
+});
+
+// ── SCROLL FADE-IN ──
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+},{threshold:0.12});
+document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
