@@ -604,6 +604,83 @@
     flex-shrink: 0;
   }
 
+  /* ── FEEDBACK / RATINGS ── */
+  #feedback { background: rgba(5, 13, 31, 0.6); }
+
+  .feedback-form {
+    background: rgba(26, 47, 110, 0.35);
+    border: 1px solid rgba(79, 195, 247, 0.2);
+    border-radius: 18px;
+    padding: 40px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .form-group { margin-bottom: 24px; }
+
+  .form-group label {
+    display: block;
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  /* Star Rating Styling */
+  .star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .star-rating input { display: none; }
+
+  .star-rating label {
+    font-size: 32px;
+    color: rgba(232, 244, 255, 0.2);
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .star-rating label:hover,
+  .star-rating label:hover ~ label,
+  .star-rating input:checked ~ label {
+    color: var(--gold);
+    text-shadow: var(--gold-glow);
+  }
+
+  .star-rating label:active { transform: scale(0.9); }
+
+  /* Input & Textarea */
+  .feedback-form textarea, 
+  .feedback-form input[type="file"] {
+    width: 100%;
+    background: rgba(5, 13, 31, 0.5);
+    border: 1px solid rgba(79, 195, 247, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    color: #fff;
+    font-family: 'Exo 2', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .feedback-form textarea:focus { border-color: var(--blue-bright); }
+
+  .feedback-form input[type="file"]::file-selector-button {
+    background: var(--blue-mid);
+    color: var(--blue-bright);
+    border: 1px solid var(--blue-bright);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 15px;
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+  }
+
   /* ── FOOTER ── */
   footer {
     position: relative;
@@ -698,7 +775,6 @@
 <div class="nebula nebula-2"></div>
 <div class="nebula nebula-3"></div>
 
-<!-- NAV -->
 <nav>
   <a href="#hero" class="nav-logo">
     <img src="logo.png" alt="The Pickle Pod logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
@@ -711,6 +787,7 @@
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#booking">Book</a></li>
     <li><a href="#location">Location</a></li>
+    <li><a href="#feedback">Rate Us</a></li>
   </ul>
   <a href="https://reclub.co/m/WMKPY0" target="_blank" class="nav-cta">Book Now</a>
   <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -718,11 +795,8 @@
   </button>
 </nav>
 
-<!-- HERO -->
 <section id="hero">
-  <img src="logo.png" alt="The Pickle Pod" class="hero-logo"
-    onerror="this.style.display='none';document.getElementById('hero-icon').style.display='block'" />
-  <div id="hero-icon" style="display:none;width:160px;height:160px;border-radius:50%;background:#1a2f6e;border:3px solid #f5c842;box-shadow:0 0 18px rgba(245,200,66,0.5);margin-bottom:32px;display:flex;align-items:center;justify-content:center;font-size:64px;animation:float 4s ease-in-out infinite">🏓</div>
+  <img src="logo.png" alt="The Pickle Pod" class="hero-logo" />
   <p class="hero-tag">Min's Premier Pickleball Hub</p>
   <h1>The Pickle <span>Pod</span></h1>
   <p class="hero-year">2 0 2 6</p>
@@ -737,7 +811,6 @@
   </div>
 </section>
 
-<!-- ABOUT -->
 <section id="about">
   <div class="section-inner">
     <div class="fade-in">
@@ -745,7 +818,7 @@
       <h2>Where <span>Sport</span> Meets the Stars</h2>
       <div class="section-divider"></div>
       <p style="max-width:680px;font-size:16px;line-height:1.9;color:rgba(232,244,255,0.75);">
-        The Pickle Pod is Minglanilla's space-themed pickleball destination, nestled inside Villa Rammelyn Garden &amp; Resort. We offer professional-grade indoor courts, certified coaching, and a welcoming community for players of all skill levels. Come play, compete, and connect.
+        The Pickle Pod is Minglanilla's space-themed pickleball destination, nestled inside Villa Rammelyn Garden & Resort. We offer professional-grade indoor courts, certified coaching, and a welcoming community for players of all skill levels. Come play, compete, and connect.
       </p>
     </div>
     <div class="stats-grid fade-in">
@@ -769,7 +842,6 @@
   </div>
 </section>
 
-<!-- PRICING -->
 <section id="pricing">
   <div class="section-inner">
     <div class="fade-in">
@@ -800,7 +872,6 @@
   </div>
 </section>
 
-<!-- GALLERY -->
 <section id="gallery">
   <div class="section-inner">
     <div class="fade-in">
@@ -824,11 +895,16 @@
       <div class="gallery-item">
         <img src="img5.jpg" alt="Doubles match at The Pickle Pod" loading="lazy" />
       </div>
+      <div class="gallery-item">
+        <img src="img6.jpg" alt="Team playing pickleball" loading="lazy" />
+      </div>
+      <div class="gallery-item">
+        <img src="img7.jpg" alt="Group photo" loading="lazy" />
+      </div>
     </div>
   </div>
 </section>
 
-<!-- BOOKING -->
 <section id="booking">
   <div class="section-inner">
     <div class="fade-in">
@@ -841,36 +917,8 @@
         <p>Booking is quick and easy through our partner app <strong style="color:#f5c842">ReClub</strong>. Select your date, pick a time slot, and pay securely online — all in under two minutes.</p>
         <a href="https://reclub.co/m/WMKPY0" target="_blank" class="btn-primary" style="margin-bottom:24px;display:inline-block;">Open ReClub App →</a>
         <div class="qr-block">
-          <div class="qr-placeholder">
-            <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
-              <!-- QR code visual representation -->
-              <rect width="80" height="80" fill="white"/>
-              <rect x="5" y="5" width="26" height="26" rx="2" fill="#050d1f"/>
-              <rect x="8" y="8" width="20" height="20" rx="1" fill="white"/>
-              <rect x="11" y="11" width="14" height="14" rx="1" fill="#050d1f"/>
-              <rect x="49" y="5" width="26" height="26" rx="2" fill="#050d1f"/>
-              <rect x="52" y="8" width="20" height="20" rx="1" fill="white"/>
-              <rect x="55" y="11" width="14" height="14" rx="1" fill="#050d1f"/>
-              <rect x="5" y="49" width="26" height="26" rx="2" fill="#050d1f"/>
-              <rect x="8" y="52" width="20" height="20" rx="1" fill="white"/>
-              <rect x="11" y="55" width="14" height="14" rx="1" fill="#050d1f"/>
-              <rect x="38" y="5" width="5" height="5" fill="#050d1f"/>
-              <rect x="38" y="14" width="5" height="5" fill="#050d1f"/>
-              <rect x="5" y="38" width="5" height="5" fill="#050d1f"/>
-              <rect x="14" y="38" width="5" height="5" fill="#050d1f"/>
-              <rect x="38" y="38" width="5" height="5" fill="#050d1f"/>
-              <rect x="47" y="38" width="5" height="5" fill="#050d1f"/>
-              <rect x="56" y="38" width="5" height="5" fill="#050d1f"/>
-              <rect x="65" y="38" width="10" height="5" fill="#050d1f"/>
-              <rect x="38" y="47" width="5" height="5" fill="#050d1f"/>
-              <rect x="47" y="47" width="5" height="5" fill="#050d1f"/>
-              <rect x="60" y="47" width="5" height="5" fill="#050d1f"/>
-              <rect x="38" y="56" width="10" height="5" fill="#050d1f"/>
-              <rect x="56" y="56" width="5" height="5" fill="#050d1f"/>
-              <rect x="65" y="56" width="10" height="5" fill="#050d1f"/>
-              <rect x="47" y="65" width="5" height="5" fill="#050d1f"/>
-              <rect x="60" y="65" width="15" height="5" fill="#050d1f"/>
-            </svg>
+          <div class="qr-placeholder" style="width:180px; height:180px;">
+            <img src="qr.png" alt="Scan to Book" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">
           </div>
           <div class="qr-text">
             <h4>Scan to Book</h4>
@@ -890,7 +938,7 @@
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-content">
-            <h4>Pick Date &amp; Time</h4>
+            <h4>Pick Date & Time</h4>
             <p>Choose your preferred date, time slot, and number of players.</p>
           </div>
         </div>
@@ -913,7 +961,6 @@
   </div>
 </section>
 
-<!-- LOCATION -->
 <section id="location">
   <div class="section-inner">
     <div class="fade-in">
@@ -925,7 +972,7 @@
       <div>
         <div class="location-card" style="margin-bottom:20px;">
           <h3>📍 Address</h3>
-          <p>Villa Rammelyn Garden &amp; Resort<br />M. Selma St., Lower Calajoan<br />Minglanilla, Philippines 6046</p>
+          <p>Villa Rammelyn Garden & Resort<br />M. Selma St., Lower Calajoan<br />Minglanilla, Philippines 6046</p>
         </div>
         <div class="location-card" style="margin-bottom:20px;">
           <h3>📬 Contact Us</h3>
@@ -961,11 +1008,46 @@
   </div>
 </section>
 
-<!-- FOOTER -->
+<section id="feedback">
+  <div class="section-inner">
+    <div class="fade-in">
+      <p class="section-label">Community</p>
+      <h2>Rate Your <span>Experience</span></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="feedback-form fade-in">
+      <form id="reviewForm">
+        <div class="form-group">
+          <label>Your Rating</label>
+          <div class="star-rating">
+            <input type="radio" id="star5" name="rating" value="5" /><label for="star5">★</label>
+            <input type="radio" id="star4" name="rating" value="4" /><label for="star4">★</label>
+            <input type="radio" id="star3" name="rating" value="3" /><label for="star3">★</label>
+            <input type="radio" id="star2" name="rating" value="2" /><label for="star2">★</label>
+            <input type="radio" id="star1" name="rating" value="1" /><label for="star1">★</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Suggestions & Feedback</label>
+          <textarea id="message" name="message" rows="4" placeholder="How can we make the Pod even better?" required></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-primary" style="width: 100%; border: none; cursor: pointer;">
+          Submit Review 🚀
+        </button>
+      </form>
+      
+      <div id="reviewsList" style="margin-top: 40px; display: grid; gap: 15px;"></div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <img src="logo.png" alt="The Pickle Pod" onerror="this.style.display='none'" />
   <div class="footer-name">THE PICKLE POD</div>
-  <p>Villa Rammelyn Garden &amp; Resort · Minglanilla, Philippines</p>
+  <p>Villa Rammelyn Garden & Resort · Minglanilla, Philippines</p>
   <div class="social-links">
     <a href="https://www.facebook.com/profile.php?id=61584861323516" target="_blank">📘 Facebook</a>
     <a href="mailto:picklepodcebu@gmail.com">✉️ Email</a>
@@ -1031,6 +1113,67 @@ const observer = new IntersectionObserver((entries)=>{
   });
 },{threshold:0.12});
 document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // Your unique Database connection
+  const firebaseConfig = {
+    apiKey: "AIzaSyBGIoJxnghCLG-791A8vTHnal_WE3BRms4",
+    authDomain: "picklepod-8a4b0.firebaseapp.com",
+    projectId: "picklepod-8a4b0",
+    storageBucket: "picklepod-8a4b0.firebasestorage.app",
+    messagingSenderId: "706396853937",
+    appId: "1:706396853937:web:024b338991eae03974b490"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const reviewForm = document.getElementById('reviewForm');
+  const reviewsList = document.getElementById('reviewsList');
+
+  // 1. SAVE REVIEW TO DATABASE
+  reviewForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById('submitBtn');
+    const rating = reviewForm.querySelector('input[name="rating"]:checked')?.value || 5;
+    const message = document.getElementById('message').value;
+
+    submitBtn.innerText = "Transmitting...";
+    submitBtn.disabled = true;
+
+    try {
+      await addDoc(collection(db, "reviews"), {
+        rating: parseInt(rating),
+        message: message,
+        timestamp: new Date()
+      });
+      reviewForm.reset();
+      submitBtn.innerText = "Submit Review 🚀";
+      submitBtn.disabled = false;
+    } catch (err) {
+      alert("Error: Check Firebase Rules!");
+      submitBtn.disabled = false;
+    }
+  });
+
+  // 2. SHOW REVIEWS INSTANTLY (Real-time)
+  const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
+  onSnapshot(q, (snapshot) => {
+    reviewsList.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const card = document.createElement('div');
+      card.style = "background: rgba(13, 27, 62, 0.6); border: 1px solid rgba(79, 195, 247, 0.2); padding: 20px; border-radius: 10px;";
+      card.innerHTML = `
+        <div style="color: #f5c842; margin-bottom: 8px;">${"★".repeat(data.rating)}</div>
+        <p style="font-style: italic; font-size: 14px; color: #e8f4ff;">"${data.message}"</p>
+      `;
+      reviewsList.appendChild(card);
+    });
+  });
 </script>
 </body>
 </html>
